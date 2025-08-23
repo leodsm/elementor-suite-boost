@@ -1,0 +1,508 @@
+/**
+ * CM Stories Player Styles
+ */
+
+/* Overlay and Dialog */
+.cmsp-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    z-index: 999999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(5px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cmsp-overlay.cmsp-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cmsp-dialog {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    height: 100vh;
+    max-height: 800px;
+    background: #000;
+    border-radius: 0;
+    overflow: hidden;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.cmsp-overlay.cmsp-open .cmsp-dialog {
+    transform: scale(1) translateY(0);
+}
+
+/* Progress Bar */
+.cmsp-progress-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.cmsp-progress-segments {
+    display: flex;
+    height: 100%;
+    gap: 2px;
+}
+
+.cmsp-progress-segment {
+    flex: 1;
+    background: rgba(255, 255, 255, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.cmsp-progress-segment.active {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.cmsp-progress-segment.completed {
+    background: #fff;
+}
+
+.cmsp-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #fff;
+    width: 0%;
+    transition: width 0.1s ease-out;
+}
+
+/* Header */
+.cmsp-header {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    right: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    z-index: 10;
+    gap: 12px;
+}
+
+.cmsp-story-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+}
+
+.cmsp-story-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #333;
+    background-size: cover;
+    background-position: center;
+    border: 2px solid #fff;
+    flex-shrink: 0;
+}
+
+.cmsp-story-meta {
+    min-width: 0;
+    flex: 1;
+}
+
+.cmsp-story-title {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.cmsp-story-date {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+    display: block;
+    line-height: 1;
+}
+
+/* Controls */
+.cmsp-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.cmsp-control-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+}
+
+.cmsp-control-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+}
+
+.cmsp-play-pause .cmsp-pause-icon {
+    display: none;
+}
+
+.cmsp-play-pause.paused .cmsp-play-icon {
+    display: none;
+}
+
+.cmsp-play-pause.paused .cmsp-pause-icon {
+    display: block;
+}
+
+.cmsp-close {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    flex-shrink: 0;
+}
+
+.cmsp-close:hover {
+    background: rgba(255, 0, 0, 0.3);
+    border-color: rgba(255, 0, 0, 0.5);
+}
+
+/* Stories Container */
+.cmsp-stories {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.cmsp-stories.swiper-vertical > .swiper-wrapper {
+    flex-direction: column;
+}
+
+.cmsp-story-slide {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Story Pages (Horizontal Swiper) */
+.cmsp-story-pages {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.cmsp-page {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: #000;
+}
+
+/* Page Types */
+.cmsp-page-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.cmsp-page-text {
+    padding: 60px 30px 30px;
+    text-align: center;
+    color: #fff;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    position: relative;
+}
+
+.cmsp-page-text::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    z-index: 1;
+}
+
+.cmsp-page-text > * {
+    position: relative;
+    z-index: 2;
+}
+
+.cmsp-page-text h2 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0 0 16px;
+    line-height: 1.3;
+}
+
+.cmsp-page-text p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+    opacity: 0.9;
+}
+
+.cmsp-page-video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* Navigation */
+.cmsp-navigation {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    right: 16px;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    pointer-events: none;
+    z-index: 10;
+}
+
+.cmsp-nav-prev,
+.cmsp-nav-next {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.3);
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(10px);
+    pointer-events: auto;
+}
+
+.cmsp-nav-prev:hover,
+.cmsp-nav-next:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: scale(1.1);
+}
+
+.cmsp-nav-prev:disabled,
+.cmsp-nav-next:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Loading and Error States */
+.cmsp-loading,
+.cmsp-error {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: #000;
+    color: #fff;
+    text-align: center;
+    z-index: 20;
+}
+
+.cmsp-spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    border-top: 3px solid #fff;
+    border-radius: 50%;
+    animation: cmsp-spin 1s linear infinite;
+    margin-bottom: 16px;
+}
+
+@keyframes cmsp-spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.cmsp-error p {
+    margin: 0 0 16px;
+    font-size: 16px;
+}
+
+.cmsp-retry-btn {
+    padding: 12px 24px;
+    border: 1px solid #fff;
+    background: transparent;
+    color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.cmsp-retry-btn:hover {
+    background: #fff;
+    color: #000;
+}
+
+/* Touch Gestures */
+.cmsp-touch-area {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    right: 0;
+    bottom: 80px;
+    z-index: 5;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+}
+
+.cmsp-touch-left {
+    grid-column: 1;
+    cursor: pointer;
+}
+
+.cmsp-touch-center {
+    grid-column: 2;
+    cursor: pointer;
+}
+
+.cmsp-touch-right {
+    grid-column: 3;
+    cursor: pointer;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .cmsp-dialog {
+        max-width: 100%;
+        height: 100vh;
+        max-height: none;
+        border-radius: 0;
+    }
+    
+    .cmsp-header {
+        top: 12px;
+        left: 12px;
+        right: 12px;
+    }
+    
+    .cmsp-navigation {
+        left: 12px;
+        right: 12px;
+    }
+    
+    .cmsp-page-text {
+        padding: 80px 20px 40px;
+    }
+    
+    .cmsp-page-text h2 {
+        font-size: 20px;
+    }
+    
+    .cmsp-page-text p {
+        font-size: 14px;
+    }
+}
+
+@media (min-width: 769px) {
+    .cmsp-dialog {
+        border-radius: 12px;
+        height: 90vh;
+    }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .cmsp-control-btn,
+    .cmsp-close,
+    .cmsp-nav-prev,
+    .cmsp-nav-next {
+        border-width: 2px;
+        background: rgba(0, 0, 0, 0.8);
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .cmsp-overlay,
+    .cmsp-dialog,
+    .cmsp-control-btn,
+    .cmsp-close,
+    .cmsp-nav-prev,
+    .cmsp-nav-next,
+    .cmsp-progress-bar {
+        transition: none !important;
+    }
+    
+    .cmsp-spinner {
+        animation: none !important;
+    }
+    
+    .cmsp-nav-prev:hover,
+    .cmsp-nav-next:hover {
+        transform: none !important;
+    }
+}
+
+/* Focus styles for accessibility */
+.cmsp-control-btn:focus,
+.cmsp-close:focus,
+.cmsp-nav-prev:focus,
+.cmsp-nav-next:focus {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+/* Deep link body class */
+.cm-story-deeplink .cmsp-overlay {
+    display: flex !important;
+}

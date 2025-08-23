@@ -1,0 +1,548 @@
+/**
+ * CM Suite Editor Styles
+ */
+
+/* Story Editor Container */
+.cm-story-editor {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+/* Editor Tabs */
+.cm-editor-tabs {
+    display: flex;
+    background: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+}
+
+.cm-tab-btn {
+    flex: 1;
+    padding: 12px 16px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-weight: 500;
+    color: #666;
+    transition: all 0.2s ease;
+}
+
+.cm-tab-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #333;
+}
+
+.cm-tab-btn.active {
+    background: #fff;
+    color: #0073aa;
+    border-bottom: 2px solid #0073aa;
+}
+
+/* Tab Content */
+.cm-tab-content {
+    padding: 20px;
+}
+
+/* Visual Editor */
+.cm-visual-controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.cm-add-page {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.cm-add-page:hover {
+    background: #f7f7f7;
+    border-color: #999;
+}
+
+.cm-add-page .dashicons {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+}
+
+/* Pages Container */
+.cm-pages-container {
+    min-height: 200px;
+}
+
+.cm-pages-container.sortable {
+    position: relative;
+}
+
+/* Page Item */
+.cm-page-item {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-bottom: 12px;
+    transition: all 0.2s ease;
+    position: relative;
+}
+
+.cm-page-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cm-page-item.ui-sortable-helper {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    transform: rotate(2deg);
+}
+
+.cm-page-item.ui-sortable-placeholder {
+    background: #f0f8ff;
+    border: 2px dashed #0073aa;
+    height: 80px;
+    visibility: visible !important;
+}
+
+/* Page Header */
+.cm-page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #ddd;
+}
+
+.cm-page-type {
+    font-weight: 600;
+    color: #555;
+    text-transform: capitalize;
+    font-size: 14px;
+}
+
+.cm-page-type::before {
+    content: '📄';
+    margin-right: 6px;
+}
+
+.cm-page-item[data-type="image"] .cm-page-type::before { content: '🖼️'; }
+.cm-page-item[data-type="video"] .cm-page-type::before { content: '🎥'; }
+.cm-page-item[data-type="text"] .cm-page-type::before { content: '📝'; }
+
+.cm-page-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.cm-page-edit,
+.cm-page-delete,
+.cm-page-handle {
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.cm-page-edit:hover {
+    background: #0073aa;
+    color: #fff;
+}
+
+.cm-page-delete:hover {
+    background: #dc3232;
+    color: #fff;
+}
+
+.cm-page-handle {
+    cursor: grab;
+    color: #999;
+}
+
+.cm-page-handle:hover {
+    background: #f0f0f0;
+    color: #666;
+}
+
+.cm-page-handle:active {
+    cursor: grabbing;
+}
+
+.cm-page-handle .dashicons {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+}
+
+/* Page Content */
+.cm-page-content {
+    padding: 16px;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.cm-page-content img {
+    max-width: 100px;
+    max-height: 60px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 12px;
+    float: left;
+}
+
+.cm-page-content .page-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.cm-page-content .page-text {
+    color: #666;
+    line-height: 1.4;
+}
+
+.cm-page-content .page-url {
+    color: #0073aa;
+    text-decoration: none;
+    word-break: break-all;
+}
+
+.cm-page-content .page-url:hover {
+    text-decoration: underline;
+}
+
+/* Empty State */
+.cm-empty-state {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+}
+
+.cm-empty-state p {
+    margin: 0;
+    font-size: 16px;
+}
+
+/* Page Edit Modal */
+.cm-page-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.cm-page-modal.open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cm-modal-content {
+    background: #fff;
+    border-radius: 8px;
+    padding: 0;
+    width: 90%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow: hidden;
+    transform: scale(0.9) translateY(20px);
+    transition: transform 0.3s ease;
+}
+
+.cm-page-modal.open .cm-modal-content {
+    transform: scale(1) translateY(0);
+}
+
+.cm-modal-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #ddd;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cm-modal-title {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+}
+
+.cm-modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #666;
+    transition: all 0.2s ease;
+}
+
+.cm-modal-close:hover {
+    background: #e0e0e0;
+    color: #333;
+}
+
+.cm-modal-body {
+    padding: 24px;
+    max-height: 60vh;
+    overflow-y: auto;
+}
+
+.cm-modal-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #ddd;
+    background: #f8f9fa;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+/* Form Fields */
+.cm-field {
+    margin-bottom: 20px;
+}
+
+.cm-field:last-child {
+    margin-bottom: 0;
+}
+
+.cm-field label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 500;
+    color: #333;
+    font-size: 14px;
+}
+
+.cm-field input,
+.cm-field textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.2s ease;
+}
+
+.cm-field input:focus,
+.cm-field textarea:focus {
+    outline: none;
+    border-color: #0073aa;
+    box-shadow: 0 0 0 1px #0073aa;
+}
+
+.cm-field textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.cm-field .description {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #666;
+}
+
+/* Media Buttons */
+.cm-media-field {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+}
+
+.cm-media-field input {
+    flex: 1;
+}
+
+.cm-media-btn {
+    padding: 10px 16px;
+    border: 1px solid #0073aa;
+    background: #0073aa;
+    color: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.cm-media-btn:hover {
+    background: #005a87;
+    border-color: #005a87;
+}
+
+/* Buttons */
+.cm-btn {
+    padding: 10px 20px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: #333;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.cm-btn:hover {
+    background: #f7f7f7;
+    border-color: #999;
+    color: #333;
+}
+
+.cm-btn.primary {
+    background: #0073aa;
+    border-color: #0073aa;
+    color: #fff;
+}
+
+.cm-btn.primary:hover {
+    background: #005a87;
+    border-color: #005a87;
+    color: #fff;
+}
+
+.cm-btn.danger {
+    background: #dc3232;
+    border-color: #dc3232;
+    color: #fff;
+}
+
+.cm-btn.danger:hover {
+    background: #c02d2e;
+    border-color: #c02d2e;
+    color: #fff;
+}
+
+/* JSON Editor */
+.cm-json-editor textarea {
+    font-family: Consolas, Monaco, 'Courier New', monospace;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cm-modal-content {
+        width: 95%;
+        margin: 20px;
+    }
+    
+    .cm-modal-body {
+        padding: 16px;
+        max-height: 50vh;
+    }
+    
+    .cm-visual-controls {
+        flex-wrap: wrap;
+    }
+    
+    .cm-add-page {
+        flex: 1;
+        min-width: calc(50% - 5px);
+        justify-content: center;
+    }
+    
+    .cm-media-field {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .cm-media-btn {
+        margin-top: 8px;
+    }
+}
+
+/* WordPress Admin Compatibility */
+.post-php .cm-story-editor,
+.post-new-php .cm-story-editor {
+    margin-top: 0;
+}
+
+/* Dark mode support (if admin uses dark theme) */
+@media (prefers-color-scheme: dark) {
+    .cm-page-modal {
+        background: rgba(0, 0, 0, 0.8);
+    }
+}
+
+/* Animation for adding pages */
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.cm-page-item.newly-added {
+    animation: slideInDown 0.3s ease-out;
+}
+
+/* Loading state */
+.cm-pages-container.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.cm-loading-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.cm-loading-spinner {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #ddd;
+    border-top: 2px solid #0073aa;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
