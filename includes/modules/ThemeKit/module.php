@@ -53,6 +53,12 @@ class ThemeKit {
             --cm-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
             --cm-shadow-hover: 0 8px 40px rgba(0, 0, 0, 0.15);
             --cm-gradient-overlay: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.8) 100%);
+            --cm-color-primary: #1e40af;
+            --cm-color-secondary: #f97316;
+            --cm-color-background: #ffffff;
+            --cm-color-text: #111827;
+            --cm-font-heading: 'Poppins', sans-serif;
+            --cm-font-body: 'Roboto', sans-serif;
         }
         </style>
         <?php
@@ -67,7 +73,13 @@ class ThemeKit {
             'radius' => '16px',
             'transition' => 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
             'shadow' => '0 4px 20px rgba(0, 0, 0, 0.1)',
-            'shadow-hover' => '0 8px 40px rgba(0, 0, 0, 0.15)'
+            'shadow-hover' => '0 8px 40px rgba(0, 0, 0, 0.15)',
+            'color-primary' => '#1e40af',
+            'color-secondary' => '#f97316',
+            'color-background' => '#ffffff',
+            'color-text' => '#111827',
+            'font-heading' => "'Poppins', sans-serif",
+            'font-body' => "'Roboto', sans-serif"
         ];
         
         return isset($tokens[$token]) ? $tokens[$token] : $default;
