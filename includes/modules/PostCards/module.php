@@ -14,6 +14,8 @@ class PostCards {
     public function __construct() {
         add_action('wp_enqueue_scripts', [$this, 'register_assets']);
         add_filter('cm_suite_category_color', [$this, 'get_category_color'], 10, 2);
+        add_action('add_meta_boxes', [$this, 'add_story_link_metabox']);
+        add_action('save_post', [$this, 'save_story_link_meta']);
     }
     
     /**
@@ -72,6 +74,60 @@ class PostCards {
         
         $slug = $category->slug;
         return isset($color_map[$slug]) ? $color_map[$slug] : '#3498DB';
+    }
+
+    /**
+     * Add meta box to relate posts with stories
+     */
+    public function add_story_link_metabox() {
+        add_meta_box(
+            'cm-story-link',
+            esc_html__('CM Story', 'cm-suite-elementor'),
+            [$this, 'render_story_link_metabox'],
+            'post',
+            'side',
+            'default'
+        );
+    }
+
+    /**
+     * Render story link meta box
+     */
+    public function render_story_link_metabox($post) {
+        wp_nonce_field('cm_story_link_meta', 'cm_story_link_meta_nonce');
+        $story_id = get_post_meta($post->ID, '_cm_story_id', true);
+        ?>
+        <p>
+            <label for="cm-story-id"><?php esc_html_e('Story ID or slug', 'cm-suite-elementor'); ?></label>
+            <input type="text" id="cm-story-id" name="cm_story_id" value="<?php echo esc_attr($story_id); ?>" style="width:100%" />
+        </p>
+        <?php
+    }
+
+    /**
+     * Save story link meta box data
+     */
+    public function save_story_link_meta($post_id) {
+        if (!isset($_POST['cm_story_link_meta_nonce']) || !wp_verify_nonce($_POST['cm_story_link_meta_nonce'], 'cm_story_link_meta')) {
+            return;
+        }
+
+        if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+            return;
+        }
+
+        if (!current_user_can('edit_post', $post_id)) {
+            return;
+        }
+
+        if (isset($_POST['cm_story_id'])) {
+            $value = sanitize_text_field($_POST['cm_story_id']);
+            if ($value) {
+                update_post_meta($post_id, '_cm_story_id', $value);
+            } else {
+                delete_post_meta($post_id, '_cm_story_id');
+            }
+        }
     }
     
     /**
