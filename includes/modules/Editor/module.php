@@ -15,6 +15,7 @@ class Editor {
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
         add_action('wp_ajax_cm_save_story_pages', [$this, 'ajax_save_story_pages']);
         add_action('wp_ajax_cm_get_media_info', [$this, 'ajax_get_media_info']);
+        add_action('wp_ajax_cm_save_studio_data', [$this, 'ajax_save_studio_data']);
     }
     
     /**
@@ -47,6 +48,27 @@ class Editor {
             CM_SUITE_VERSION,
             true
         );
+
+        // Studio assets
+        wp_enqueue_style(
+            'cm-editor-studio',
+            CM_SUITE_URL . 'includes/modules/Editor/assets/css/studio.css',
+            [],
+            CM_SUITE_VERSION
+        );
+
+        wp_enqueue_script(
+            'cm-editor-studio',
+            CM_SUITE_URL . 'includes/modules/Editor/assets/js/studio.js',
+            [],
+            CM_SUITE_VERSION,
+            true
+        );
+
+        wp_localize_script('cm-editor-studio', 'cmEditorStudio', [
+            'ajaxurl' => admin_url('admin-ajax.php'),
+            'nonce'   => wp_create_nonce('cm_editor_studio_nonce'),
+        ]);
         
         // Localize script
         wp_localize_script('cm-editor', 'cmEditorAjax', [
@@ -122,6 +144,30 @@ class Editor {
         } else {
             wp_send_json_error(['message' => 'Attachment not found']);
         }
+    }
+
+    /**
+     * AJAX handler for saving studio data
+     */
+    public function ajax_save_studio_data() {
+        if (!wp_verify_nonce($_POST['nonce'], 'cm_editor_studio_nonce')) {
+            wp_die('Nonce verification failed');
+        }
+
+        $post_id = intval($_POST['post_id']);
+        if (!current_user_can('edit_post', $post_id)) {
+            wp_die('Insufficient permissions');
+        }
+
+        $data_raw = wp_unslash($_POST['data'] ?? '');
+        $data = json_decode($data_raw, true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            wp_send_json_error(['message' => 'Invalid data']);
+        }
+
+        $sanitized = array_map('sanitize_text_field', $data);
+        update_post_meta($post_id, '_cm_studio_data', wp_json_encode($sanitized));
+        wp_send_json_success(['message' => 'Studio data saved']);
     }
     
     /**
