@@ -302,6 +302,17 @@ class CM_Post_Cards extends Widget_Base {
         // Enqueue assets
         wp_enqueue_style('cm-post-cards');
         wp_enqueue_script('cm-post-cards');
+
+        // Ensure player launcher script is loaded and configured
+        wp_enqueue_script('cm-player-launcher');
+        static $launcher_configured = false;
+        if (!$launcher_configured) {
+            wp_add_inline_script(
+                'cm-player-launcher',
+                "document.addEventListener('DOMContentLoaded',function(){if(window.CMPlayerLauncher){var inst=window.CMPlayerLauncher.getInstance();if(inst){window.CMPlayerLauncher.updateConfig({customDataAttribute:'data-story-id'});}else{window.CMPlayerLauncher.init({customDataAttribute:'data-story-id'});}}});"
+            );
+            $launcher_configured = true;
+        }
         
         $is_carousel = $settings['layout_type'] === 'carousel';
         $wrapper_class = $is_carousel ? 'cmpc-carousel' : 'cmpc-grid';
@@ -351,10 +362,14 @@ class CM_Post_Cards extends Widget_Base {
         $primary_category = $categories[0] ?? null;
         $category_color = $primary_category ? apply_filters('cm_suite_category_color', '', $primary_category) : '#3498DB';
         $ghost_text = \CM\Suite\PostCards\PostCards::get_ghost_text(get_the_title());
+        $story_id = get_post_meta(get_the_ID(), '_cm_story_id', true);
+        if (!$story_id) {
+            $story_id = get_post_field('post_name');
+        }
         ?>
-        
+
         <article class="cmpc-card" style="--cmpc-accent: <?php echo esc_attr($category_color); ?>;">
-            <a href="<?php the_permalink(); ?>" class="cmpc-card__link" aria-label="<?php printf(esc_attr__('Read more about %s', 'cm-suite-elementor'), get_the_title()); ?>">
+            <a href="<?php the_permalink(); ?>" class="cmpc-card__link" data-story-id="<?php echo esc_attr($story_id); ?>" aria-label="<?php printf(esc_attr__('Read more about %s', 'cm-suite-elementor'), get_the_title()); ?>">
                 
                 <div class="cmpc-card__image">
                     <?php if (has_post_thumbnail()): ?>
