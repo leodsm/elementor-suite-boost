@@ -184,6 +184,7 @@ class CM_Stories_Player extends Widget_Base {
                                 <span class="cmsp-play-icon">▶</span>
                                 <span class="cmsp-pause-icon">⏸</span>
                             </button>
+                            <button class="cmsp-control-btn cmsp-open-article" aria-label="<?php esc_attr_e('Read article', 'cm-suite-elementor'); ?>">ℹ</button>
                         </div>
                     <?php endif; ?>
                     
@@ -215,9 +216,16 @@ class CM_Stories_Player extends Widget_Base {
                 </div>
                 
             </div>
-            
+
         </div>
-        
+        <div id="<?php echo esc_attr($widget_id); ?>-article-modal" class="cmsp-article-modal" style="display: none;" aria-hidden="true">
+            <div class="cmsp-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="<?php echo esc_attr($widget_id); ?>-article-title">
+                <button class="cmsp-modal-close" aria-label="<?php esc_attr_e('Close article', 'cm-suite-elementor'); ?>">×</button>
+                <h2 id="<?php echo esc_attr($widget_id); ?>-article-title" class="cmsp-modal-title"></h2>
+                <div class="cmsp-modal-content"></div>
+            </div>
+        </div>
+
         <script>
         document.addEventListener('DOMContentLoaded', function() {
             if (window.CMSuiteStoriesPlayer) {
