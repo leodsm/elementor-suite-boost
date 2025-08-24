@@ -19,4 +19,16 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    outDir: "includes/modules/Editor/assets/js",
+    emptyOutDir: false,
+    rollupOptions: {
+      input: path.resolve(__dirname, "src/story-studio.tsx"),
+      output: {
+        format: "iife",
+        inlineDynamicImports: true,
+        entryFileNames: "story-studio.js",
+      },
+    },
+  },
 }));

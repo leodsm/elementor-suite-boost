@@ -54,6 +54,22 @@ class Stories_Rest_Controller extends \WP_REST_Controller {
             ],
             'schema' => [$this, 'get_public_item_schema'],
         ]);
+
+        // POST /wp-json/cm/v1/stories/{id}/pages
+        register_rest_route($this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)/pages', [
+            [
+                'methods' => \WP_REST_Server::EDITABLE,
+                'callback' => [$this, 'update_story_pages'],
+                'permission_callback' => [$this, 'update_story_pages_permissions_check'],
+                'args' => [
+                    'id' => [
+                        'description' => esc_html__('Unique identifier for the story.', 'cm-suite-elementor'),
+                        'type' => 'integer',
+                        'sanitize_callback' => 'absint',
+                    ],
+                ],
+            ],
+        ]);
     }
     
     /**
@@ -137,8 +153,47 @@ class Stories_Rest_Controller extends \WP_REST_Controller {
         }
         
         $data = $this->prepare_story_for_response($story, $request, true);
-        
+
         return rest_ensure_response($data);
+    }
+
+    /**
+     * Update story pages
+     */
+    public function update_story_pages($request) {
+        $story_id = (int) $request['id'];
+        $story = get_post($story_id);
+
+        if (empty($story) || $story->post_type !== 'cm_story') {
+            return new \WP_Error(
+                'rest_story_invalid_id',
+                esc_html__('Invalid story ID.', 'cm-suite-elementor'),
+                ['status' => 404]
+            );
+        }
+
+        $data = $request->get_json_params();
+        $pages = $data['pages'] ?? [];
+
+        if (!is_array($pages)) {
+            return new \WP_Error(
+                'rest_invalid_pages',
+                esc_html__('Invalid pages data.', 'cm-suite-elementor'),
+                ['status' => 400]
+            );
+        }
+
+        update_post_meta($story_id, '_cm_story_pages', wp_json_encode($pages));
+
+        return rest_ensure_response(['success' => true]);
+    }
+
+    /**
+     * Permissions check for updating story pages
+     */
+    public function update_story_pages_permissions_check($request) {
+        $story_id = (int) $request['id'];
+        return current_user_can('edit_post', $story_id);
     }
     
     /**

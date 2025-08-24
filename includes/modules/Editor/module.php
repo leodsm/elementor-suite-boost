@@ -15,6 +15,8 @@ class Editor {
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
         add_action('wp_ajax_cm_save_story_pages', [$this, 'ajax_save_story_pages']);
         add_action('wp_ajax_cm_get_media_info', [$this, 'ajax_get_media_info']);
+        add_action('admin_menu', [$this, 'register_admin_page']);
+        add_action('admin_enqueue_scripts', [$this, 'enqueue_story_studio_assets']);
     }
     
     /**
@@ -122,6 +124,50 @@ class Editor {
         } else {
             wp_send_json_error(['message' => 'Attachment not found']);
         }
+    }
+
+    /**
+     * Register Story Studio admin page
+     */
+    public function register_admin_page() {
+        add_menu_page(
+            esc_html__('Story Studio', 'cm-suite-elementor'),
+            esc_html__('Story Studio', 'cm-suite-elementor'),
+            'edit_posts',
+            'cm-story-studio',
+            [$this, 'render_story_studio'],
+            'dashicons-format-gallery',
+            20
+        );
+    }
+
+    /**
+     * Render Story Studio root div
+     */
+    public function render_story_studio() {
+        echo '<div id="cm-story-studio-root"></div>';
+    }
+
+    /**
+     * Enqueue assets for Story Studio
+     */
+    public function enqueue_story_studio_assets($hook) {
+        if ($hook !== 'toplevel_page_cm-story-studio') {
+            return;
+        }
+        wp_enqueue_media();
+        wp_enqueue_script(
+            'cm-story-studio',
+            CM_SUITE_URL . 'includes/modules/Editor/assets/js/story-studio.js',
+            [],
+            CM_SUITE_VERSION,
+            true
+        );
+        wp_localize_script('cm-story-studio', 'cmStoryStudio', [
+            'restUrl' => esc_url_raw(rest_url('cm/v1/')),
+            'nonce'   => wp_create_nonce('wp_rest'),
+            'storyId' => isset($_GET['story_id']) ? absint($_GET['story_id']) : 0,
+        ]);
     }
     
     /**
