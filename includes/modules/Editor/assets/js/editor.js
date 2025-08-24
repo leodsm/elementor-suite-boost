@@ -250,16 +250,16 @@
         createNewPage(type) {
             switch (type) {
                 case 'image':
-                    return { type: 'image', url: '' };
-                    
+                    return { type: 'image', url: '', full_post_id: '', full_post_url: '' };
+
                 case 'text':
-                    return { type: 'text', title: '', text: '' };
-                    
+                    return { type: 'text', title: '', text: '', full_post_id: '', full_post_url: '' };
+
                 case 'video':
-                    return { type: 'video', url: '' };
-                    
+                    return { type: 'video', url: '', full_post_id: '', full_post_url: '' };
+
                 default:
-                    return { type: 'text', title: '', text: '' };
+                    return { type: 'text', title: '', text: '', full_post_id: '', full_post_url: '' };
             }
         }
         
@@ -358,7 +358,19 @@
                     `;
                     break;
             }
-            
+
+            // Full post fields common to all types
+            fieldsHTML += `
+                <div class="cm-field">
+                    <label>Full Post ID</label>
+                    <input type="number" name="full_post_id" value="${page.full_post_id || ''}" placeholder="123">
+                </div>
+                <div class="cm-field">
+                    <label>Full Post URL</label>
+                    <input type="url" name="full_post_url" value="${page.full_post_url || ''}" placeholder="https://example.com/full-post">
+                </div>
+            `;
+
             return `
                 <div class="cm-page-modal">
                     <div class="cm-modal-content">

@@ -134,6 +134,17 @@
                     this.close();
                 }
             });
+
+            // Full post button
+            this.storiesContainer.addEventListener('click', (e) => {
+                const btn = e.target.closest('.cmsp-full-post-btn');
+                if (btn) {
+                    e.preventDefault();
+                    const id = btn.dataset.postId || '';
+                    const url = btn.dataset.postUrl || '';
+                    this.openFullPost(id, url);
+                }
+            });
         }
         
         /**
@@ -352,36 +363,94 @@
          * Render individual page content
          */
         renderPage(page) {
+            let content = '';
+
             switch (page.type) {
                 case 'image':
-                    return `<img src="${page.url}" alt="" class="cmsp-page-image" loading="lazy">`;
-                    
+                    content = `<img src="${page.url}" alt="" class="cmsp-page-image" loading="lazy">`;
+                    break;
+
                 case 'text':
-                    return `
+                    content = `
                         <div class="cmsp-page-text">
                             <h2>${page.title || ''}</h2>
                             <p>${page.text || ''}</p>
                         </div>
                     `;
-                    
+                    break;
+
                 case 'video':
-                    return `
+                    content = `
                         <video class="cmsp-page-video" controls playsinline>
                             <source src="${page.url}" type="video/mp4">
                             Your browser does not support video playback.
                         </video>
                     `;
-                    
+                    break;
+
                 default:
-                    return `
+                    content = `
                         <div class="cmsp-page-text">
                             <h2>Unsupported Content</h2>
                             <p>This content type is not supported.</p>
                         </div>
                     `;
             }
+
+            if (page.full_post_id || page.full_post_url) {
+                const dataId = page.full_post_id ? ` data-post-id="${page.full_post_id}"` : '';
+                const dataUrl = page.full_post_url ? ` data-post-url="${page.full_post_url}"` : '';
+                content += `<button type="button" class="cmsp-full-post-btn"${dataId}${dataUrl}>Read more</button>`;
+            }
+
+            return content;
         }
-        
+
+        /**
+         * Open full post modal
+         */
+        openFullPost(postId, postUrl) {
+            const modal = document.createElement('div');
+            modal.className = 'cmsp-post-modal';
+            modal.innerHTML = `
+                <div class="cmsp-post-modal-content">
+                    <button type="button" class="cmsp-post-modal-close">&times;</button>
+                    <div class="cmsp-post-modal-body">Loading...</div>
+                </div>
+            `;
+            document.body.appendChild(modal);
+
+            const closeModal = () => modal.remove();
+            modal.querySelector('.cmsp-post-modal-close').addEventListener('click', closeModal);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal();
+                }
+            });
+
+            const body = modal.querySelector('.cmsp-post-modal-body');
+
+            if (postId) {
+                fetch(`${window.location.origin}/wp-json/wp/v2/posts/${postId}`)
+                    .then(res => res.json())
+                    .then(data => {
+                        body.innerHTML = `<h2>${data.title.rendered}</h2>${data.content.rendered}`;
+                    })
+                    .catch(() => {
+                        body.innerHTML = '<p>Failed to load content.</p>';
+                    });
+            } else if (postUrl) {
+                fetch(postUrl)
+                    .then(res => res.text())
+                    .then(html => {
+                        body.innerHTML = html;
+                    })
+                    .catch(() => {
+                        body.innerHTML = '<p>Failed to load content.</p>';
+                    });
+            }
+        }
+
         /**
          * Open player
          */
