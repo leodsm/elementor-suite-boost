@@ -38,6 +38,9 @@
             this.storyAvatar = this.container.querySelector('.cmsp-story-avatar');
             this.loading = this.container.querySelector('.cmsp-loading');
             this.error = this.container.querySelector('.cmsp-error');
+            this.articleModal = document.getElementById(containerId + '-article-modal');
+            this.articleTitle = this.articleModal?.querySelector('.cmsp-modal-title');
+            this.articleContent = this.articleModal?.querySelector('.cmsp-modal-content');
             
             this.init();
         }
@@ -74,6 +77,24 @@
             if (playPauseBtn) {
                 playPauseBtn.addEventListener('click', () => this.togglePlayPause());
             }
+
+            // Open article button
+            const openArticleBtn = this.container.querySelector('.cmsp-open-article');
+            if (openArticleBtn) {
+                openArticleBtn.addEventListener('click', () => this.openArticle());
+            }
+
+            if (this.articleModal) {
+                const modalClose = this.articleModal.querySelector('.cmsp-modal-close');
+                if (modalClose) {
+                    modalClose.addEventListener('click', () => this.closeArticle());
+                }
+                this.articleModal.addEventListener('click', (e) => {
+                    if (e.target === this.articleModal) {
+                        this.closeArticle();
+                    }
+                });
+            }
             
             // Navigation buttons
             const prevBtn = this.container.querySelector('.cmsp-nav-prev');
@@ -100,7 +121,11 @@
                 switch (e.key) {
                     case 'Escape':
                         e.preventDefault();
-                        this.close();
+                        if (this.articleModal && this.articleModal.getAttribute('aria-hidden') === 'false') {
+                            this.closeArticle();
+                        } else {
+                            this.close();
+                        }
                         break;
                     case 'ArrowLeft':
                         e.preventDefault();
@@ -492,7 +517,7 @@
          */
         close() {
             if (!this.isOpen) return;
-            
+
             this.isOpen = false;
             this.stopAutoPlay();
             
@@ -510,6 +535,41 @@
             if (this.settings.deepLink) {
                 this.clearURL();
             }
+        }
+
+        /**
+         * Open article modal
+         */
+        async openArticle() {
+            if (!this.articleModal) return;
+            const story = this.stories[this.currentStoryIndex];
+            if (!story) return;
+
+            try {
+                const wpRest = cmStoriesAjax.restUrl.replace('cm/v1/', 'wp/v2/');
+                const response = await fetch(`${wpRest}cm_story/${story.id}`);
+                if (!response.ok) throw new Error('Failed to load article');
+                const data = await response.json();
+                if (this.articleTitle) {
+                    this.articleTitle.textContent = data.title?.rendered || story.title || '';
+                }
+                if (this.articleContent) {
+                    this.articleContent.innerHTML = data.content?.rendered || '';
+                }
+                this.articleModal.style.display = 'flex';
+                this.articleModal.setAttribute('aria-hidden', 'false');
+            } catch (err) {
+                console.error('Stories Player: Error loading article', err);
+            }
+        }
+
+        /**
+         * Close article modal
+         */
+        closeArticle() {
+            if (!this.articleModal) return;
+            this.articleModal.style.display = 'none';
+            this.articleModal.setAttribute('aria-hidden', 'true');
         }
         
         /**

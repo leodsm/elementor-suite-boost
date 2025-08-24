@@ -201,6 +201,52 @@
     border-color: rgba(255, 0, 0, 0.5);
 }
 
+/* Article modal */
+.cmsp-article-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 1000000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.cmsp-article-modal[aria-hidden="false"] {
+    display: flex;
+}
+
+.cmsp-article-modal .cmsp-modal-dialog {
+    background: #fff;
+    color: #000;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+    padding: 20px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.cmsp-article-modal .cmsp-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #000;
+}
+
+.cmsp-article-modal .cmsp-modal-close:focus {
+    outline: 2px solid #000;
+    outline-offset: 2px;
+}
+
+.cmsp-article-modal .cmsp-modal-title {
+    margin-top: 0;
+}
+
 /* Stories Container */
 .cmsp-stories {
     width: 100%;
