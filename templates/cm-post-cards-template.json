@@ -1,0 +1,31 @@
+{
+  "title": "CM Post Cards Page",
+  "type": "page",
+  "content": [
+    {
+      "id": "section1",
+      "elType": "section",
+      "settings": {},
+      "elements": [
+        {
+          "id": "column1",
+          "elType": "column",
+          "settings": {},
+          "elements": [
+            {
+              "id": "widget1",
+              "elType": "widget",
+              "widgetType": "cm-suite-post-cards",
+              "settings": {
+                "posts_per_page": 6,
+                "layout_type": "",
+                "columns": "3",
+                "show_category": "yes"
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
